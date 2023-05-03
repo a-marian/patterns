@@ -12,6 +12,7 @@ public class AndExpression implements Expression {
 
     @Override
     public boolean interpreter(String text) {
+        System.out.print(text + " ");
         return expr1.interpreter(text) && expr2.interpreter(text);
     }
 }

@@ -1,5 +1,7 @@
 package ar.com.patterns.behavioral.interpreter;
 
+import ar.com.patterns.behavioral.state.Context;
+
 /**
  * Use Interpreter pattern to build an interpreter for a language.
  * TWhen you need to implement a simple language, the interpreter pattern defines a class-based
@@ -12,6 +14,13 @@ package ar.com.patterns.behavioral.interpreter;
  * */
 
 public class InterpreterMain {
+
+    class UserClient {
+        private Context context;
+        public UserClient (Context context){
+            this.context = context;
+        }
+    }
 
     public static void main(String[] args) {
         Expression expression1 = new ScannerExpression("Trinidad");

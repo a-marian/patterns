@@ -12,6 +12,5 @@ public class PowerOn implements Command {
     @Override
     public void execute() {
         light.switchOn();
-        System.out.println("Light is on");
     }
 }

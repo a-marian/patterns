@@ -13,6 +13,5 @@ public class PowerOff implements Command {
     @Override
     public void execute() {
         light.switchOff();
-        System.out.println("Light is off");
     }
 }

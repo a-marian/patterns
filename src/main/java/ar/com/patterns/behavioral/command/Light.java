@@ -6,9 +6,11 @@ public class Light {
 
     public void switchOn(){
         isOn = true;
+        System.out.println("The light is on");
     }
 
     public void switchOff(){
         isOn = false;
+        System.out.println("The light is off");
     }
 }

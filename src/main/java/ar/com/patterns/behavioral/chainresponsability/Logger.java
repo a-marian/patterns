@@ -1,26 +1,45 @@
 package ar.com.patterns.behavioral.chainresponsability;
 
-public abstract class Logger {
+import java.util.Arrays;
+import java.util.EnumSet;
+import java.util.function.Consumer;
 
-    public static int INFO = 1;
-    public static int ERROR = 2;
-    public static int DEBUG = 3;
-    protected int levels;
+public interface Logger {
 
-    protected Logger nextLevelLogger;
+      enum LogLevel {
+        FUNCTIONAL_MESSAGE, FUNCTIONAL_ERROR, INFO, DEBUG, WARNING, ERROR;
 
-    public void setNextLevelLogger(Logger nextLevelLogger){
-        this.nextLevelLogger = nextLevelLogger;
-    }
-
-    public void logMessage(int level, String msg){
-        if(this.levels <= level){
-            displayLog(msg);
-        }
-        if(nextLevelLogger == null){
-            nextLevelLogger.logMessage(level, msg);
+         static LogLevel[] all (){
+            return  values();
         }
     }
+    default Logger setNextLevelLogger(Logger nextLevelLogger){
+        return ( msg, severity ) -> {
+            displayLog(msg, severity);
+            nextLevelLogger.displayLog(msg, severity);
+        };
+    }
+    void displayLog(String msg, LogLevel severity) ;
 
-    protected  abstract void displayLog(String msg);
+     static Logger writeLogger(LogLevel[] levels, Consumer<String> stringConsumer){
+        EnumSet<LogLevel> set = EnumSet.copyOf(Arrays.asList(levels));
+        return (msg, severity) -> {
+          if (set.contains(severity)) {
+              stringConsumer.accept(msg);
+          }
+        };
+    }
+
+    static Logger consoleLogger(LogLevel... levels){
+        return writeLogger(levels, msg -> System.out.println("CONSOLE : "+ msg) );
+    }
+
+    static Logger fileLogger(LogLevel... levels){
+        return writeLogger(levels, msg -> System.out.println("FILE : "+ msg) );
+    }
+
+    static Logger emailLogger(LogLevel... levels){
+        return  writeLogger(levels, msg -> System.out.println("MAIL :" + msg));
+    }
+
 }
